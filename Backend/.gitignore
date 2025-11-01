@@ -1,0 +1,15 @@
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Build directory (created by React or other frameworks)
+build/
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store        # macOS
+Thumbs.db        # Windows
