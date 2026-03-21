@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="40c35b90-89f2-46c2-858b-d07c76758855" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Frontend/config.env" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/config.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/services/adminService.js" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/services/adminService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/components/BookingConfirmation.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/components/BookingConfirmation.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/components/Footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/components/Footer.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/components/KhaltiCheckoutButton.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/components/KhaltiCheckoutButton.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/components/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/layouts/AdminLayout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/layouts/AdminLayout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/layouts/AuthLayout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/layouts/AuthLayout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/AboutPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/AboutPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/BookingConfirmationPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/BookingConfirmationPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/BusBookingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/BusBookingPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/BusTracking.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/BusTracking.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/HomePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/UserPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/UserPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/admin/AdminLogin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/admin/AdminLogin.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/admin/Bookings.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/admin/Bookings.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/admin/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/admin/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/admin/Drivers.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/admin/Drivers.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/admin/ManageBuses.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/admin/ManageBuses.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/admin/Routes.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/admin/Routes.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/admin/Users.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/admin/Users.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/auth/SignIn.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/auth/SignIn.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/customer/BookingDetails.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/customer/BookingDetails.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/customer/Bookings.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/customer/Bookings.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/customer/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/customer/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/customer/Payment.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/customer/Payment.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/tailwind.config.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="115" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Sujentamang&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Sujen-Tamang/Yatru-Sewa.git&quot;,
+    &quot;accountId&quot;: &quot;92f60e23-93d6-4a00-a8ca-0c451cab9a6c&quot;
+  }
+}</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="37xEGELuQG9VzNOPtmtPkFZmlU4" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="ReactDesignerToolWindowState">
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.intellij.reactbuddy.reactComponents" value="false" />
+        <entry key="com.intellij.reactbuddy.reactInspector" value="false" />
+      </map>
+    </option>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-WS-253.29346.143" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="40c35b90-89f2-46c2-858b-d07c76758855" name="Changes" comment="" />
+      <created>1767836225694</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1767836225694</updated>
+      <workItem from="1767836227436" duration="925000" />
+      <workItem from="1770053931056" duration="287000" />
+      <workItem from="1773817759247" duration="14000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
