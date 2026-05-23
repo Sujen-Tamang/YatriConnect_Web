@@ -1,4 +1,4 @@
-# Yatru Sewa - Bus Ticketing and Tracking Web App
+# Yatri Connect- Bus Ticketing and Tracking Web App
 
 Yatru Sewa is a web application built using the MERN stack (MongoDB, Express.js, React.js, Node.js) that allows users to easily book bus tickets, receive e-tickets via Gmail, and track buses in real-time, similar to airplane tracking.
 
