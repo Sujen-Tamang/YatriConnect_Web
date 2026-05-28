@@ -36,15 +36,16 @@ connectDB().catch((err) => {
 app.use(
     cors({
         origin: [
+            process.env.FRONTEND_URL,
             'http://localhost:5173',
             'http://localhost:4000',
             'http://192.168.1.94:4000',
             'http://192.168.1.94:8081',
             'http://192.168.1.102:4000',
             'http://192.168.1.102:3000',
-            'https://yatri-connect-web.vercel.app/'
-        ],
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+            'https://yatri-connect-web.vercel.app'
+        ].filter(Boolean),
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         credentials: true,
     })
 );
