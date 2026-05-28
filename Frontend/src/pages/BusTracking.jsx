@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import io from 'socket.io-client';
-import axios from 'axios';
+import api from '../../services/api';
 import { useParams } from 'react-router-dom';
 
 // Fix Leaflet marker icon issue
@@ -14,7 +14,8 @@ L.Icon.Default.mergeOptions({
     shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-const socket = io('http://localhost:5000', {
+const socketUrl = import.meta.env.VITE_REACT_APP_API_URL?.replace('/api/v1', '') || 'http://localhost:4000';
+const socket = io(socketUrl, {
     path: '/socket.io',
     withCredentials: true,
 });
@@ -28,9 +29,7 @@ const BusTracking = () => {
     useEffect(() => {
         const fetchBus = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/v1/buses/${busId}/seats`, {
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-                });
+                const response = await api.get(`/buses/${busId}/seats`);
                 if (response.data.success) {
                     setBus(response.data.data);
                     if (response.data.data.currentLocation?.lat && response.data.data.currentLocation?.lng) {

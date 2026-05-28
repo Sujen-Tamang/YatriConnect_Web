@@ -10,15 +10,22 @@ const KhaltiCallback = () => {
 
     useEffect(() => {
         const verifyPayment = async () => {
-            const params = new URLSearchParams(location.search);
+                        const params = new URLSearchParams(location.search);
             const pidx = params.get('pidx');
             const transaction_id = params.get('transaction_id');
             const amount = params.get('amount');
             const bookingId = params.get('booking') || params.get('purchase_order_id');
+            const isMobile = params.get('isMobile') === 'true';
 
             if (!pidx || !bookingId) {
                 setStatus('Invalid payment callback parameters.');
-                setTimeout(() => navigate('/profile/bookings'), 3000);
+                if (isMobile) {
+                    setTimeout(() => {
+                        window.location.href = 'yatriconnect://booking?status=failed';
+                    }, 1500);
+                } else {
+                    setTimeout(() => navigate('/profile/bookings'), 3000);
+                }
                 return;
             }
 
@@ -33,17 +40,35 @@ const KhaltiCallback = () => {
                 if (res.data.success) {
                     setStatus('Payment Verified Successfully! Redirecting...');
                     toast.success('Payment completed successfully!');
-                    setTimeout(() => navigate(`/booking-confirmation/${bookingId}`), 2000);
+                    if (isMobile) {
+                        setTimeout(() => {
+                            window.location.href = `yatriconnect://ticket-view?bookingId=${bookingId}`;
+                        }, 1500);
+                    } else {
+                        setTimeout(() => navigate(`/booking-confirmation/${bookingId}`), 2000);
+                    }
                 } else {
                     setStatus('Payment verification failed.');
                     toast.error(res.data.message || 'Payment failed.');
-                    setTimeout(() => navigate('/profile/bookings'), 3000);
+                    if (isMobile) {
+                        setTimeout(() => {
+                            window.location.href = `yatriconnect://booking?bookingId=${bookingId}&status=failed`;
+                        }, 1500);
+                    } else {
+                        setTimeout(() => navigate('/profile/bookings'), 3000);
+                    }
                 }
             } catch (err) {
                 console.error("Verification failed:", err);
                 setStatus('Failed to reach verification server.');
                 toast.error('Verification error.');
-                setTimeout(() => navigate('/profile/bookings'), 3000);
+                if (isMobile) {
+                    setTimeout(() => {
+                        window.location.href = `yatriconnect://booking?bookingId=${bookingId}&status=failed`;
+                    }, 1500);
+                } else {
+                    setTimeout(() => navigate('/profile/bookings'), 3000);
+                }
             }
         };
 

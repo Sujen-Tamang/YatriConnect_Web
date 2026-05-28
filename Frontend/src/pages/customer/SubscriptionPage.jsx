@@ -15,6 +15,7 @@ const SubscriptionPage = () => {
     const checkKhaltiPayment = async () => {
         const pidx = searchParams.get('pidx');
         const sub_id = searchParams.get('purchase_order_id') || searchParams.get('sub_id');
+        const isMobile = searchParams.get('isMobile') === 'true';
 
         if (pidx && sub_id) {
             setProcessing(true);
@@ -22,13 +23,29 @@ const SubscriptionPage = () => {
                 const res = await verifySubscription(pidx, sub_id);
                 if (res.success) {
                     toast.success('Subscription activated successfully!');
-                    setSearchParams({});
-                    fetchSubscription();
+                    if (isMobile) {
+                        setTimeout(() => {
+                            window.location.href = "yatriconnect://pass-view";
+                        }, 1500);
+                    } else {
+                        setSearchParams({});
+                        fetchSubscription();
+                    }
                 } else {
                     toast.error('Payment verification failed.');
+                    if (isMobile) {
+                        setTimeout(() => {
+                            window.location.href = "yatriconnect://city-passes?status=failed";
+                        }, 1500);
+                    }
                 }
             } catch (error) {
                 toast.error(error.response?.data?.message || 'Error verifying payment');
+                if (isMobile) {
+                    setTimeout(() => {
+                        window.location.href = "yatriconnect://city-passes?status=failed";
+                    }, 1500);
+                }
             } finally {
                 setProcessing(false);
             }
