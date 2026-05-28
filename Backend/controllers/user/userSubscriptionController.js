@@ -11,7 +11,7 @@ const subscriptionPlans = {
 };
 
 export const initiateSubscription = catchAsyncError(async (req, res, next) => {
-    const { planType } = req.body;
+    const { planType, isMobile } = req.body;
     const userId = req.user._id;
 
     console.log(`[SUBSCRIPTION_INIT] Plan: ${planType}, User: ${userId}`);
@@ -43,15 +43,20 @@ export const initiateSubscription = catchAsyncError(async (req, res, next) => {
         status: 'pending'
     });
 
-    // Sanitization matching the working Booking Controller
-    const rawFrontend = process.env.FRONTEND_URL || "http://localhost:5173";
-    const safeFrontend = rawFrontend.startsWith('http') ? rawFrontend : "http://localhost:5173";
+    // Ensure Mobile/Localhost fallback works perfectly so Safari doesn't hang
+    const webUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    const mobileUrl = process.env.MOBILE_FRONTEND_URL || "http://192.168.1.67:5173";
+    
+    let safeFrontend = webUrl;
+    if (isMobile && webUrl.includes('localhost')) {
+        safeFrontend = mobileUrl;
+    }
     
     const parsedPhone = req.user.phone ? req.user.phone.replace(/[^0-9]/g, '') : "9800000000";
     const safePhone = parsedPhone.length >= 10 ? parsedPhone.substring(0, 10) : "9800000000";
 
     const payload = {
-        return_url: `${safeFrontend}/customer/subscription`,
+        return_url: `${safeFrontend}/customer/subscription${isMobile ? '?isMobile=true' : ''}`,
         website_url: safeFrontend,
         amount: amountInPaisa,
         purchase_order_id: subscription._id.toString(),
@@ -100,7 +105,7 @@ export const initiateSubscription = catchAsyncError(async (req, res, next) => {
 
 export const verifySubscriptionPayment = catchAsyncError(async (req, res, next) => {
     const { pidx } = req.body;
-    const subId = req.query.purchase_order_id || req.query.sub_id; // Check both for safety
+    const subId = req.query.purchase_order_id || req.query.sub_id || req.body.sub_id || req.body.subscriptionId || req.body.purchase_order_id; // Check both for safety
 
     console.log(`[SUBSCRIPTION_VERIFY] PIDX: ${pidx}, SubID: ${subId}`);
 

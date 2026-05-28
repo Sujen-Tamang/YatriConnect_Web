@@ -126,37 +126,29 @@ export const calculateBusETA = catchAsyncError(async (req, res, next) => {
     try {
         let durationsArray = [];
 
-        if (process.env.OPENROUTESERVICE_API_KEY) {
-            // OpenRouteService Integration
-            const orsUrl = 'https://api.openrouteservice.org/v2/matrix/driving-car';
-            const response = await fetch(orsUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': process.env.OPENROUTESERVICE_API_KEY
-                },
-                body: JSON.stringify({
-                    locations: points,
-                    sources: [0],
-                    metrics: ['duration']
-                })
-            });
-            const data = await response.json();
-            if (!data.durations || !data.durations[0]) {
-                throw new Error('Routing error from OpenRouteService');
-            }
-            durationsArray = data.durations[0];
-        } else {
-            // Fallback to OSRM
-            const osrmUrl = `https://router.project-osrm.org/table/v1/driving/${coordsString}?sources=0&annotations=duration`;
-            const response = await fetch(osrmUrl);
-            const data = await response.json();
-
-            if (!data.durations || !data.durations[0]) {
-                throw new Error('Routing error from OSRM');
-            }
-            durationsArray = data.durations[0];
+        if (!process.env.OPENROUTESERVICE_API_KEY) {
+            throw new Error('OpenRouteService API key is missing. OSRM fallback has been removed.');
         }
+
+        // OpenRouteService Integration
+        const orsUrl = 'https://api.openrouteservice.org/v2/matrix/driving-car';
+        const response = await fetch(orsUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': process.env.OPENROUTESERVICE_API_KEY
+            },
+            body: JSON.stringify({
+                locations: points,
+                sources: [0],
+                metrics: ['duration']
+            })
+        });
+        const data = await response.json();
+        if (!data.durations || !data.durations[0]) {
+            throw new Error('Routing error from OpenRouteService');
+        }
+        durationsArray = data.durations[0];
 
         const now = new Date();
         const etas = stops.map((stop, index) => {
@@ -228,7 +220,7 @@ export const verifyTicket = catchAsyncError(async (req, res, next) => {
     const { type, id } = parsedData;
 
     if (type === 'booking') {
-        const booking = await Booking.findById(id).populate('user', 'fullName email phone');
+        const booking = await Booking.findById(id).populate('user', 'name email phone');
         if (!booking) {
             return next(new AppError('Booking not found', 404));
         }
@@ -239,7 +231,7 @@ export const verifyTicket = catchAsyncError(async (req, res, next) => {
                 status: 'INVALID',
                 message: `Booking status is ${booking.status}`,
                 details: {
-                    passenger: booking.user?.fullName || 'Unknown',
+                    passenger: booking.user?.name || 'Unknown',
                     id: booking._id
                 }
             });
@@ -250,7 +242,7 @@ export const verifyTicket = catchAsyncError(async (req, res, next) => {
             status: 'VALID',
             message: 'Ticket verified successfully',
             details: {
-                passenger: booking.user?.fullName || 'Unknown',
+                passenger: booking.user?.name || 'Unknown',
                 id: booking._id,
                 seats: booking.seats,
                 journeyDate: booking.journeyDate
@@ -258,7 +250,7 @@ export const verifyTicket = catchAsyncError(async (req, res, next) => {
         });
 
     } else if (type === 'subscription') {
-        const subscription = await Subscription.findById(id).populate('user', 'fullName email phone');
+        const subscription = await Subscription.findById(id).populate('user', 'name email phone');
         if (!subscription) {
             return next(new AppError('Subscription not found', 404));
         }
@@ -272,7 +264,7 @@ export const verifyTicket = catchAsyncError(async (req, res, next) => {
                 status: 'INVALID',
                 message: isExpired ? 'Pass has expired' : `Pass status is ${subscription.status}`,
                 details: {
-                    passenger: subscription.user?.fullName || 'Unknown',
+                    passenger: subscription.user?.name || 'Unknown',
                     id: subscription._id
                 }
             });
@@ -283,7 +275,7 @@ export const verifyTicket = catchAsyncError(async (req, res, next) => {
             status: 'VALID',
             message: 'Pass verified successfully',
             details: {
-                passenger: subscription.user?.fullName || 'Unknown',
+                passenger: subscription.user?.name || 'Unknown',
                 id: subscription._id,
                 plan: subscription.planType,
                 expiry: subscription.endDate

@@ -7,7 +7,7 @@ import Bus from "../../models/Bus.js";
 
 
 export const initiateKhaltiPayment = catchAsyncError(async (req, res, next) => {
-    const { bookingId, amount, busId, seats, journeyDate } = req.body;
+    const { bookingId, amount, busId, seats, journeyDate, isMobile } = req.body;
     const userId = req.user._id;
 
     // 1. Strict Validation
@@ -50,10 +50,22 @@ export const initiateKhaltiPayment = catchAsyncError(async (req, res, next) => {
 
     // 3. Khalti Safe Payload Preparation
     const safeAmount = Math.round(Number(amount) * 100); // Strictly integer paisa
-    const rawFrontend = process.env.FRONTEND_URL || "http://localhost:5173";
-    const safeFrontend = rawFrontend.startsWith('http') ? rawFrontend : "http://localhost:5173";
     
-    const safeReturnUrl = `${safeFrontend}/payment/khalti/callback?booking=${booking._id}`;
+    // Web uses FRONTEND_URL
+    const webUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    const mobileUrl = process.env.MOBILE_FRONTEND_URL || "http://192.168.1.67:5173";
+    
+    // If it's local development (localhost) and requested from a mobile device, we MUST swap out 
+    // localhost for the networked IP (mobileUrl) otherwise the phone's browser will fail to resolve it.
+    let safeFrontend = webUrl;
+    if (isMobile && webUrl.includes('localhost')) {
+        safeFrontend = mobileUrl;
+    }
+    
+    // We send them to our React Web Frontend. The Web frontend will verify the payment and then 
+    // redirect back to the app using window.location.href = "yatriconnect://..."
+    const safeReturnUrl = `${safeFrontend}/payment/khalti/callback?booking=${booking._id}${isMobile ? '&isMobile=true' : ''}`;
+        
     const safeWebsiteUrl = safeFrontend;
     const safeOrderId = booking._id.toString();
     const safeOrderName = `Booking ${booking.bookingId}`;
@@ -113,7 +125,7 @@ export const initiateKhaltiPayment = catchAsyncError(async (req, res, next) => {
 
 export const verifyKhaltiPayment = catchAsyncError(async (req, res, next) => {
     const { pidx, transaction_id, amount } = req.body;
-    const bookingId = req.query.booking;
+    const bookingId = req.query.booking || req.body.bookingId || req.body.booking;
 
     // Verify with Khalti
     let verification;
