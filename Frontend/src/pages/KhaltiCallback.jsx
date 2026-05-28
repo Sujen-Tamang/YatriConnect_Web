@@ -20,9 +20,10 @@ const KhaltiCallback = () => {
             if (!pidx || !bookingId) {
                 setStatus('Invalid payment callback parameters.');
                 if (isMobile) {
+                    window.location.href = 'yatriconnect://booking?status=failed';
                     setTimeout(() => {
-                        window.location.href = 'yatriconnect://booking?status=failed';
-                    }, 1500);
+                        setStatus('Invalid parameters! If the app did not open automatically, please click the button below to return.');
+                    }, 500);
                 } else {
                     setTimeout(() => navigate('/profile/bookings'), 3000);
                 }
@@ -41,9 +42,12 @@ const KhaltiCallback = () => {
                     setStatus('Payment Verified Successfully! Redirecting...');
                     toast.success('Payment completed successfully!');
                     if (isMobile) {
+                        // Immediately attempt redirect to avoid Safari blocking delayed redirects
+                        window.location.href = `yatriconnect://ticket-view?bookingId=${bookingId}`;
+                        // Backup in case the automatic redirect is blocked
                         setTimeout(() => {
-                            window.location.href = `yatriconnect://ticket-view?bookingId=${bookingId}`;
-                        }, 1500);
+                            setStatus('Payment Verified! If the app did not open automatically, please click the button below.');
+                        }, 1000);
                     } else {
                         setTimeout(() => navigate(`/booking-confirmation/${bookingId}`), 2000);
                     }
@@ -51,9 +55,10 @@ const KhaltiCallback = () => {
                     setStatus('Payment verification failed.');
                     toast.error(res.data.message || 'Payment failed.');
                     if (isMobile) {
+                        window.location.href = `yatriconnect://booking?bookingId=${bookingId}&status=failed`;
                         setTimeout(() => {
-                            window.location.href = `yatriconnect://booking?bookingId=${bookingId}&status=failed`;
-                        }, 1500);
+                            setStatus('Payment Failed! If the app did not open automatically, please click the button below to return.');
+                        }, 500);
                     } else {
                         setTimeout(() => navigate('/profile/bookings'), 3000);
                     }
@@ -63,9 +68,10 @@ const KhaltiCallback = () => {
                 setStatus('Failed to reach verification server.');
                 toast.error('Verification error.');
                 if (isMobile) {
+                    window.location.href = `yatriconnect://booking?bookingId=${bookingId}&status=failed`;
                     setTimeout(() => {
-                        window.location.href = `yatriconnect://booking?bookingId=${bookingId}&status=failed`;
-                    }, 1500);
+                        setStatus('Verification Error! If the app did not open automatically, please click the button below to return.');
+                    }, 500);
                 } else {
                     setTimeout(() => navigate('/profile/bookings'), 3000);
                 }
@@ -80,7 +86,15 @@ const KhaltiCallback = () => {
             <div className="bg-[#1c2619] border border-[#2e3928] rounded-xl p-8 max-w-md w-full text-center shadow-lg">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#59f20d] mx-auto mb-6"></div>
                 <h2 className="text-2xl font-bold mb-4">Processing Payment</h2>
-                <p className="text-[#a6ba9c]">{status}</p>
+                <p className="text-[#a6ba9c] mb-6">{status}</p>
+                {status.includes('If the app did not open automatically') && (
+                    <a
+                        href={`yatriconnect://ticket-view?bookingId=${new URLSearchParams(location.search).get('booking') || new URLSearchParams(location.search).get('purchase_order_id')}`}
+                        className="inline-block mt-4 bg-[#59f20d] text-black font-semibold px-6 py-2 rounded-lg"
+                    >
+                        Return to App
+                    </a>
+                )}
             </div>
         </div>
     );
