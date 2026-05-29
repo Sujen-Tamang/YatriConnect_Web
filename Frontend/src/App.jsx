@@ -45,7 +45,7 @@ import AdminDriverAssignment from "./pages/admin/DriverAssignment"
 import AdminTerms from "./pages/admin/Terms"
 import AdminPrivacy from "./pages/admin/Privacy"
 import AdminCancellation from "./pages/admin/Cancellation"
-import AdminMarketing from "./pages/admin/Marketing"
+import AdminNotifications from "./pages/admin/Marketing"
 
 // Layout Components
 import AuthLayout from "./layouts/AuthLayout"
@@ -116,7 +116,8 @@ function App() {
                 <Route path="/admin/terms" element={<AdminTerms />} />
                 <Route path="/admin/privacy" element={<AdminPrivacy />} />
                 <Route path="/admin/cancellation" element={<AdminCancellation />} />
-                <Route path="/admin/marketing" element={<AdminMarketing />} />
+                <Route path="/admin/notifications" element={<AdminNotifications />} />
+                <Route path="/admin/marketing" element={<Navigate to="/admin/notifications" replace />} />
               </Route>
             </Route>
 

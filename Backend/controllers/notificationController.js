@@ -26,11 +26,43 @@ export const sendPromo = catchAsyncError(async (req, res, next) => {
     });
 });
 
+// Admin: Send announcement to all drivers
+export const sendAnnouncement = catchAsyncError(async (req, res, next) => {
+    const { title, message } = req.body;
+
+    if (!title || !message) {
+        return next(new AppError("Title and message are required", 400));
+    }
+
+    const drivers = await User.find({ role: 'driver' }).select('_id');
+    const notifications = drivers.map((driver) => ({
+        title,
+        message,
+        type: 'announcement',
+        recipient: driver._id
+    }));
+
+    if (notifications.length > 0) {
+        await Notification.insertMany(notifications);
+    }
+
+    res.status(201).json({
+        success: true,
+        message: "Announcement sent to drivers",
+        count: notifications.length
+    });
+});
+
 // Admin: Get recent system notifications
 export const getAdminNotifications = catchAsyncError(async (req, res, next) => {
-    const notifications = await Notification.find({ 
-        type: { $in: ['system', 'route-update'] } 
-    }).sort({ createdAt: -1 }).limit(20);
+    const { type } = req.query;
+    const filter = type ? { type } : {
+        type: { $in: ['promo', 'system', 'route-update', 'announcement', 'payment', 'assignment', 'bus-online', 'bus-status'] }
+    };
+
+    const notifications = await Notification.find(filter)
+        .sort({ createdAt: -1 })
+        .limit(50);
 
     res.status(200).json({
         success: true,
@@ -78,5 +110,21 @@ export const createSystemNotification = async (title, message) => {
         });
     } catch (err) {
         console.error("Failed to create system notification:", err);
+    }
+};
+
+export const createUserNotification = async ({ recipient, title, message, type = 'system' }) => {
+    try {
+        if (!recipient) {
+            return;
+        }
+        await Notification.create({
+            title,
+            message,
+            type,
+            recipient
+        });
+    } catch (err) {
+        console.error("Failed to create user notification:", err);
     }
 };

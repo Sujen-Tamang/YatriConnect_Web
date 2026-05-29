@@ -7,7 +7,17 @@ import Booking from '../../models/Booking.js';
 import Subscription from '../../models/Subscription.js';
 import { User } from '../../models/userModel.js';
 
-// Get all city buses
+// Get all city buses (including inactive)
+export const getAllCityBuses = catchAsyncError(async (req, res, next) => {
+    const buses = await CityBus.find({}).sort({ active: -1 });
+    res.status(200).json({
+        success: true,
+        count: buses.length,
+        data: buses
+    });
+});
+
+// Get all active city buses
 export const getActiveCityBuses = catchAsyncError(async (req, res, next) => {
     const buses = await CityBus.find({ active: true });
     res.status(200).json({

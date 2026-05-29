@@ -1,6 +1,7 @@
 import express from 'express';
 import { 
     sendPromo, 
+    sendAnnouncement,
     getAdminNotifications, 
     getUserNotifications, 
     markAsRead 
@@ -12,6 +13,7 @@ const router = express.Router();
 
 // Admin routes
 router.post('/promo', isAuthenticated, isAdmin, sendPromo);
+router.post('/announcement', isAuthenticated, isAdmin, sendAnnouncement);
 router.get('/admin', isAuthenticated, isAdmin, getAdminNotifications);
 
 // User routes

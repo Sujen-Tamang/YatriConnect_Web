@@ -10,7 +10,9 @@ import { errorMiddleware } from './middlewares/errorMiddleware.js';
 import routes from './routes/index.js';
 import Bus from './models/Bus.js';
 import CityBus from './models/CityBus.js';
+import Booking from './models/Booking.js';
 import jwt from 'jsonwebtoken';
+import { createUserNotification } from './controllers/notificationController.js';
 
 // Initialize Express
 export const app = express();
@@ -172,6 +174,10 @@ io.on('connection', (socket) => {
         try {
             const active = status !== 'offline';
 
+            const previousLongBus = await Bus.findById(busId).select('status busNumber').lean();
+            let previousStatus = previousLongBus?.status;
+            let isLongBus = Boolean(previousLongBus);
+
             // Store the active bus for this socket to handle accidental disconnects
             if (active) {
                 socket.activeBusId = busId;
@@ -186,16 +192,62 @@ io.on('connection', (socket) => {
             );
 
             if (!updatedBus) {
+                const previousCityBus = await CityBus.findById(busId).select('status busNumber').lean();
+                if (!previousStatus) {
+                    previousStatus = previousCityBus?.status;
+                }
+
                 updatedBus = await CityBus.findByIdAndUpdate(
                     busId,
                     { $set: { status, active } },
                     { new: true }
                 );
+
+                if (updatedBus) {
+                    isLongBus = false;
+                }
             }
 
             if (!updatedBus) {
                 socket.emit('error', { message: 'Bus not identified' });
                 return;
+            }
+
+            const statusChanged = previousStatus && previousStatus !== status;
+            if (statusChanged && isLongBus) {
+                const startOfDay = new Date();
+                startOfDay.setHours(0, 0, 0, 0);
+                const endOfDay = new Date(startOfDay);
+                endOfDay.setDate(endOfDay.getDate() + 1);
+
+                const bookings = await Booking.find({
+                    bus: busId,
+                    status: 'Confirmed',
+                    travelDate: { $gte: startOfDay, $lt: endOfDay }
+                }).select('user bookingId');
+
+                const uniqueUsers = new Set(bookings.map((booking) => booking.user?.toString()).filter(Boolean));
+
+                const statusTitleMap = {
+                    'on-route': 'Bus Is On Route',
+                    'break': 'Bus Is On Break',
+                    'offline': 'Route Ended'
+                };
+
+                const statusMessageMap = {
+                    'on-route': `Your bus ${updatedBus.busNumber || 'assigned bus'} is now on route.`,
+                    'break': `Your bus ${updatedBus.busNumber || 'assigned bus'} is currently on break.`,
+                    'offline': `Your bus ${updatedBus.busNumber || 'assigned bus'} has ended the route.`
+                };
+
+                await Promise.all(
+                    Array.from(uniqueUsers).map((userId) => createUserNotification({
+                        recipient: userId,
+                        title: statusTitleMap[status] || 'Bus Status Update',
+                        message: statusMessageMap[status] || `Your bus ${updatedBus.busNumber || 'assigned bus'} status changed to ${status}.`,
+                        type: status === 'on-route' ? 'bus-online' : 'bus-status'
+                    }))
+                );
             }
 
             // Sync all maps immediately

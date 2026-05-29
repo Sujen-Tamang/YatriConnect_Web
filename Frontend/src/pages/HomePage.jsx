@@ -115,7 +115,7 @@ const HomePage = () => {
                   </div>
                   <span className="text-[10px] font-bold uppercase tracking-widest text-[#a6ba9c] bg-brand-dark px-2 py-1 rounded border border-brand-border">Fast</span>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">In-City</h3>
+                <h3 className="text-xl font-bold text-white mb-3">InCity</h3>
                 <p className="text-brand-muted text-sm mb-6 flex-grow">
                   Efficient daily commuting options to navigate the urban landscape seamlessly.
                 </p>
@@ -123,89 +123,12 @@ const HomePage = () => {
                   Learn More <span className="material-symbols-outlined text-sm">arrow_forward</span>
                 </Link>
               </motion.div>
-
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="bg-brand-surface rounded-3xl p-8 border border-brand-border hover:border-brand-primary/50 transition-colors group flex-1 flex flex-col"
-              >
-                <div className="flex justify-between items-start mb-6">
-                  <div className="size-10 bg-brand-dark rounded-xl flex items-center justify-center text-brand-primary border border-brand-primary/20">
-                    <span className="material-symbols-outlined text-xl">domain</span>
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-brand-primary bg-brand-primary/10 px-2 py-1 rounded border border-brand-primary/30">Business</span>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">Logistics Solutions</h3>
-                <p className="text-brand-muted text-sm mb-6 flex-grow">
-                  Customized logistics and corporate travel for every business need.
-                </p>
-                <Link to="/bus-booking" className="inline-flex items-center gap-2 text-brand-primary font-bold text-sm hover:text-white transition-colors">
-                  Learn More <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                </Link>
-              </motion.div>
-
             </div>
 
           </div>
         </div>
       </section>
 
-      {/* Experience Section */}
-      <section className="py-24 bg-brand-dark border-t border-brand-border relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="mb-12">
-            <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight">Experience Professional Mobility</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.98 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="relative rounded-3xl overflow-hidden border border-brand-border group h-80 object-cover"
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1555529733-0e67056058ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                alt="Tech Forward" 
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60"
-                style={{ filter: "hue-rotate(180deg) saturate(2)" }} 
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/50 to-transparent"></div>
-              
-              <div className="absolute bottom-0 left-0 p-8 w-full">
-                <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">Tech-Forward Fleet</h3>
-                <p className="text-brand-muted text-sm">Equipped with real-time GPS, Wi-Fi, and climate control.</p>
-              </div>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.98 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="relative rounded-3xl overflow-hidden border border-brand-border group h-80 object-cover bg-brand-surface"
-            >
-               <img 
-                src="https://images.unsplash.com/photo-1616423640778-28d1b53229bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                alt="App Wireframe" 
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-50"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/50 to-transparent"></div>
-              
-              <div className="absolute bottom-0 left-0 p-8 w-full">
-                <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">User-Friendly Booking</h3>
-                <p className="text-brand-muted text-sm">Reserve seats in seconds with our intuitive mobile app.</p>
-              </div>
-            </motion.div>
-
-          </div>
-
-        </div>
-      </section>
 
       {/* Modern Neon CTA Section */}
       <section className="py-16 bg-brand-dark relative">

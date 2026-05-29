@@ -4,6 +4,7 @@ import { AppError } from "../../middlewares/errorMiddleware.js";
 import { Payment } from "../../models/Payment.js";
 import Booking from "../../models/Booking.js";
 import Bus from "../../models/Bus.js";
+import { createUserNotification } from "../notificationController.js";
 
 
 export const initiateKhaltiPayment = catchAsyncError(async (req, res, next) => {
@@ -49,11 +50,11 @@ export const initiateKhaltiPayment = catchAsyncError(async (req, res, next) => {
     }
 
     // 3. Khalti Safe Payload Preparation
-    const safeAmount = Math.round(Number(amount) * 100); // Strictly integer paisa
+    const safeAmount = Math.round(Number(amount) * 100); // Strictly integer paisaa
     
     // Web uses FRONTEND_URL
     const webUrl = process.env.FRONTEND_URL || "http://localhost:5173";
-    const mobileUrl = process.env.MOBILE_FRONTEND_URL || "http://192.168.1.67:5173";
+    const mobileUrl = process.env.MOBILE_FRONTEND_URL || "http://172.20.10.2:5173";
     
     // If it's local development (localhost) and requested from a mobile device, we MUST swap out 
     // localhost for the networked IP (mobileUrl) otherwise the phone's browser will fail to resolve it.
@@ -62,9 +63,13 @@ export const initiateKhaltiPayment = catchAsyncError(async (req, res, next) => {
         safeFrontend = mobileUrl;
     }
     
-    // We send them to our React Web Frontend. The Web frontend will verify the payment and then 
-    // redirect back to the app using window.location.href = "yatriconnect://..."
-    const safeReturnUrl = `${safeFrontend}/payment/khalti/callback?booking=${booking._id}${isMobile ? '&isMobile=true' : ''}`;
+    const rawRedirectUrl = typeof req.body.redirectUrl === 'string' ? req.body.redirectUrl.trim() : '';
+    const hasAllowedScheme = rawRedirectUrl.startsWith('exp://') || rawRedirectUrl.startsWith('yatriconnect://');
+    const redirectUrlParam = hasAllowedScheme ? `&redirectUrl=${encodeURIComponent(rawRedirectUrl)}` : '';
+
+    // We send them to our React Web Frontend. The Web frontend will verify the payment and then
+    // redirect back to the app using a deep link (Expo Go uses exp://, builds use yatriconnect://).
+    const safeReturnUrl = `${safeFrontend}/payment/khalti/callback?booking=${booking._id}${isMobile ? '&isMobile=true' : ''}${redirectUrlParam}`;
         
     const safeWebsiteUrl = safeFrontend;
     const safeOrderId = booking._id.toString();
@@ -173,7 +178,7 @@ export const verifyKhaltiPayment = catchAsyncError(async (req, res, next) => {
             status: 'Confirmed',
             payment: payment?._id,
             $unset: { expiresAt: 1 }
-        });
+        }, { new: true });
 
         if (updatedBooking) {
             await Bus.findByIdAndUpdate(updatedBooking.bus, {
@@ -186,6 +191,13 @@ export const verifyKhaltiPayment = catchAsyncError(async (req, res, next) => {
                 }
             }, {
                 arrayFilters: [{ 'elem.number': { $in: updatedBooking.seats } }]
+            });
+
+            await createUserNotification({
+                recipient: updatedBooking.user,
+                title: 'Payment Successful',
+                message: `Your payment for booking ${updatedBooking.bookingId} was successful.`,
+                type: 'payment'
             });
         }
     }

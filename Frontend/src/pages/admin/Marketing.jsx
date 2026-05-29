@@ -1,12 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { sendPromo, getAdminNotifications } from "../../../services/adminService"
+import { sendPromo, sendAnnouncement, getAdminNotifications } from "../../../services/adminService"
 import { motion, AnimatePresence } from "framer-motion"
 
-const Marketing = () => {
-    const [title, setTitle] = useState("")
-    const [message, setMessage] = useState("")
+const Notifications = () => {
+    const [activeTab, setActiveTab] = useState("promo")
+    const [promoTitle, setPromoTitle] = useState("")
+    const [promoMessage, setPromoMessage] = useState("")
+    const [announcementTitle, setAnnouncementTitle] = useState("")
+    const [announcementMessage, setAnnouncementMessage] = useState("")
     const [loading, setLoading] = useState(false)
     const [notifications, setNotifications] = useState([])
     const [status, setStatus] = useState(null)
@@ -25,14 +28,35 @@ const Marketing = () => {
         setLoading(true)
         setStatus(null)
         try {
-            const res = await sendPromo({ title, message })
+            const res = await sendPromo({ title: promoTitle, message: promoMessage })
             if (res.success) {
                 setStatus({ type: "success", text: "Promotion sent to all users!" })
-                setTitle("")
-                setMessage("")
+                setPromoTitle("")
+                setPromoMessage("")
                 fetchHistory()
             } else {
                 setStatus({ type: "error", text: res.message || "Failed to send promotion" })
+            }
+        } catch (error) {
+            setStatus({ type: "error", text: "An unexpected error occurred" })
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleSendAnnouncement = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+        setStatus(null)
+        try {
+            const res = await sendAnnouncement({ title: announcementTitle, message: announcementMessage })
+            if (res.success) {
+                setStatus({ type: "success", text: "Announcement sent to drivers!" })
+                setAnnouncementTitle("")
+                setAnnouncementMessage("")
+                fetchHistory()
+            } else {
+                setStatus({ type: "error", text: res.message || "Failed to send announcement" })
             }
         } catch (error) {
             setStatus({ type: "error", text: "An unexpected error occurred" })
@@ -45,8 +69,8 @@ const Marketing = () => {
         <div className="space-y-10 pb-10 max-w-6xl mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
                 <div>
-                    <h2 className="text-white text-3xl font-black uppercase tracking-tighter leading-none mb-2">Marketing <br/>& Outreach</h2>
-                    <p className="text-[#a6ba9c] text-xs font-semibold opacity-60">Send promotional offers and system alerts to all users.</p>
+                    <h2 className="text-white text-3xl font-black uppercase tracking-tighter leading-none mb-2">Notifications <br/>& Broadcasts</h2>
+                    <p className="text-[#a6ba9c] text-xs font-semibold opacity-60">Send marketing campaigns and driver announcements.</p>
                 </div>
             </div>
 
@@ -57,19 +81,39 @@ const Marketing = () => {
                     animate={{ opacity: 1, x: 0 }}
                     className="bg-[#1c2619] border border-[#2e3928] rounded-[32px] p-8 shadow-2xl"
                 >
+                    <div className="flex items-center gap-2 mb-8">
+                        <button
+                            type="button"
+                            onClick={() => setActiveTab("promo")}
+                            className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'promo' ? 'bg-[#59f20d] text-[#0d140a]' : 'bg-[#0d140a] text-[#a6ba9c]'}`}
+                        >
+                            Marketing Campaign
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setActiveTab("announcement")}
+                            className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'announcement' ? 'bg-[#59f20d] text-[#0d140a]' : 'bg-[#0d140a] text-[#a6ba9c]'}`}
+                        >
+                            Driver Announcement
+                        </button>
+                    </div>
                     <div className="mb-8">
-                        <h3 className="text-white text-xl font-black uppercase tracking-tighter">New Promotion</h3>
-                        <p className="text-[10px] text-[#a6ba9c] font-bold uppercase tracking-widest opacity-40">Create a global notification</p>
+                        <h3 className="text-white text-xl font-black uppercase tracking-tighter">
+                            {activeTab === 'promo' ? 'New Campaign' : 'New Driver Notice'}
+                        </h3>
+                        <p className="text-[10px] text-[#a6ba9c] font-bold uppercase tracking-widest opacity-40">
+                            {activeTab === 'promo' ? 'Send to all users' : 'Send to all drivers'}
+                        </p>
                     </div>
 
-                    <form onSubmit={handleSendPromo} className="space-y-6">
+                    <form onSubmit={activeTab === 'promo' ? handleSendPromo : handleSendAnnouncement} className="space-y-6">
                         <div>
-                            <label className="text-[10px] text-[#a6ba9c] font-black uppercase tracking-[0.2em] mb-2 block">Campaign Title</label>
+                            <label className="text-[10px] text-[#a6ba9c] font-black uppercase tracking-[0.2em] mb-2 block">Title</label>
                             <input 
                                 type="text" 
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                placeholder="e.g., Weekend Special Discount!"
+                                value={activeTab === 'promo' ? promoTitle : announcementTitle}
+                                onChange={(e) => activeTab === 'promo' ? setPromoTitle(e.target.value) : setAnnouncementTitle(e.target.value)}
+                                placeholder={activeTab === 'promo' ? "e.g., Weekend Special Discount!" : "e.g., Shift Reminder"}
                                 className="w-full bg-[#0d140a] border border-[#2e3928] rounded-2xl px-5 py-4 text-white text-sm focus:border-[#59f20d] outline-none transition-all font-medium"
                                 required
                             />
@@ -78,9 +122,9 @@ const Marketing = () => {
                         <div>
                             <label className="text-[10px] text-[#a6ba9c] font-black uppercase tracking-[0.2em] mb-2 block">Message Content</label>
                             <textarea 
-                                value={message}
-                                onChange={(e) => setMessage(e.target.value)}
-                                placeholder="Write your promotional message here..."
+                                value={activeTab === 'promo' ? promoMessage : announcementMessage}
+                                onChange={(e) => activeTab === 'promo' ? setPromoMessage(e.target.value) : setAnnouncementMessage(e.target.value)}
+                                placeholder={activeTab === 'promo' ? "Write your promotional message here..." : "Write your announcement for drivers..."}
                                 rows={5}
                                 className="w-full bg-[#0d140a] border border-[#2e3928] rounded-2xl px-5 py-4 text-white text-sm focus:border-[#59f20d] outline-none transition-all font-medium resize-none"
                                 required
@@ -110,7 +154,7 @@ const Marketing = () => {
                             ) : (
                                 <>
                                     <span className="material-symbols-outlined text-lg">send</span>
-                                    BROADCAST PROMO
+                                    {activeTab === 'promo' ? 'BROADCAST CAMPAIGN' : 'SEND ANNOUNCEMENT'}
                                 </>
                             )}
                         </button>
@@ -124,7 +168,7 @@ const Marketing = () => {
                     className="bg-[#1c2619] border border-[#2e3928] rounded-[32px] overflow-hidden shadow-2xl flex flex-col"
                 >
                     <div className="px-8 py-6 border-b border-[#2e3928]">
-                        <h2 className="text-white text-xl font-black uppercase tracking-tighter">Broadcast History</h2>
+                        <h2 className="text-white text-xl font-black uppercase tracking-tighter">Notification History</h2>
                         <p className="text-[10px] text-[#a6ba9c] font-bold uppercase tracking-widest opacity-40">Previously sent notifications</p>
                     </div>
                     <div className="flex-1 overflow-y-auto p-4 space-y-3 max-h-[600px] custom-scrollbar">
@@ -151,4 +195,4 @@ const Marketing = () => {
     )
 }
 
-export default Marketing
+export default Notifications

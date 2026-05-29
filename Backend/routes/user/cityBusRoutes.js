@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+    getAllCityBuses,
     getActiveCityBuses,
     checkIn,
     checkOut,
@@ -12,6 +13,7 @@ import { isAuthenticated } from "../../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
+router.get('/', getAllCityBuses);
 router.get('/active', getActiveCityBuses);
 router.get('/assigned', isAuthenticated, getDriverAssignedRoutes);
 router.get('/eta/:busId', calculateBusETA);

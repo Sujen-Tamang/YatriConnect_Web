@@ -51,7 +51,7 @@ const NAV_GROUPS = [
       { name: "User Management", path: "/admin/users",     icon: "users"     },
       { name: "Bookings",        path: "/admin/bookings",  icon: "bookings"  },
       { name: "Payments",        path: "/admin/payments",  icon: "payments"  },
-      { name: "Marketing",       path: "/admin/marketing", icon: "marketing" },
+      { name: "Notifications",  path: "/admin/notifications", icon: "marketing" },
       { name: "Settings",        path: "/admin/settings",  icon: "settings"  },
     ],
   },

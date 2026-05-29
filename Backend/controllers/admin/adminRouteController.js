@@ -2,7 +2,7 @@ import { catchAsyncError } from '../../middlewares/catchAsyncError.js';
 import Route from '../../models/Route.js';
 import Bus from '../../models/Bus.js';
 import { AppError } from '../../middlewares/errorMiddleware.js';
-import { createSystemNotification } from '../notificationController.js';
+import { createSystemNotification, createUserNotification } from '../notificationController.js';
 
 // Create a new route and assign a bus
 export const createRoute = catchAsyncError(async (req, res, next) => {
@@ -88,6 +88,13 @@ export const assignDriver = catchAsyncError(async (req, res, next) => {
         "Driver Assigned", 
         `A driver has been assigned to the route ${route.from} - ${route.to}.`
     );
+
+    await createUserNotification({
+        recipient: driverId,
+        title: 'New Route Assignment',
+        message: `You have been assigned to the route ${route.from} - ${route.to}.`,
+        type: 'assignment'
+    });
 });
 
 // Delete route

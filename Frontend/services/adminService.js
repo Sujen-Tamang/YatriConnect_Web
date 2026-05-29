@@ -314,9 +314,19 @@ export const sendPromo = async (promoData) => {
     }
 };
 
-export const getAdminNotifications = async () => {
+export const sendAnnouncement = async (announcementData) => {
+  try {
+    const response = await api.post('notifications/announcement', announcementData);
+    return response.data;
+  } catch (error) {
+    console.error('Error sending announcement:', error.response?.data || error.message);
+    return { success: false, message: error.response?.data?.message || 'Error sending announcement' };
+  }
+};
+
+export const getAdminNotifications = async (type) => {
     try {
-        const response = await api.get('notifications/admin');
+    const response = await api.get('notifications/admin', { params: type ? { type } : undefined });
         return response.data;
     } catch (error) {
         console.error('Error fetching admin notifications:', error.response?.data || error.message);

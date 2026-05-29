@@ -153,27 +153,29 @@ const BusTracking = () => {
                                     {position[0].toFixed(4)}, {position[1].toFixed(4)}
                                 </div>
                             </div>
-                            <MapContainer
-                                center={position}
-                                zoom={13}
-                                style={{ height: '550px', width: '100%' }}
-                                className="z-0"
-                            >
-                                <TileLayer
-                                    url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                                />
-                                {bus?.currentLocation?.lat && bus?.currentLocation?.lng && (
-                                    <Marker position={position}>
-                                        <Popup>
-                                            <div className="text-sm">
-                                                <strong>{bus.yatayatName}</strong> ({bus.busNumber})<br />
-                                                {bus.route.from} → {bus.route.to}
-                                            </div>
-                                        </Popup>
-                                    </Marker>
-                                )}
-                            </MapContainer>
+                                <MapContainer
+                                    center={position}
+                                    zoom={13}
+                                    style={{ height: '550px', width: '100%' }}
+                                    className="z-0"
+                                >
+                                    <TileLayer
+                                            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                                            attribution="&copy; OpenStreetMap & CARTO"
+                                        />
+
+                                    {bus?.currentLocation?.lat && bus?.currentLocation?.lng && (
+                                        <Marker position={position}>
+                                            <Popup>
+                                                <div className="text-sm">
+                                                    <strong>{bus.yatayatName}</strong> ({bus.busNumber})
+                                                    <br />
+                                                    {bus.route.from} → {bus.route.to}
+                                                </div>
+                                            </Popup>
+                                        </Marker>
+                                    )}
+                                </MapContainer>
                         </div>
                     </div>
                 </div>

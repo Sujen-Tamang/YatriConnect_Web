@@ -1,7 +1,7 @@
 import { catchAsyncError } from '../../middlewares/catchAsyncError.js';
 import CityBus from '../../models/CityBus.js';
 import { AppError } from '../../middlewares/errorMiddleware.js';
-import { createSystemNotification } from '../notificationController.js';
+import { createSystemNotification, createUserNotification } from '../notificationController.js';
 
 export const createCityBus = catchAsyncError(async (req, res, next) => {
     const { busNumber, route, driver } = req.body;
@@ -24,6 +24,8 @@ export const createCityBus = catchAsyncError(async (req, res, next) => {
 });
 
 export const updateCityBus = catchAsyncError(async (req, res, next) => {
+    const existingBus = await CityBus.findById(req.params.id);
+
     const bus = await CityBus.findByIdAndUpdate(
         req.params.id,
         req.body,
@@ -43,6 +45,18 @@ export const updateCityBus = catchAsyncError(async (req, res, next) => {
         "Bus Updated", 
         `Bus ${bus.busNumber} details have been updated.`
     );
+
+    const previousDriver = existingBus?.driver ? existingBus.driver.toString() : null;
+    const nextDriver = bus?.driver ? bus.driver.toString() : null;
+
+    if (nextDriver && nextDriver !== previousDriver) {
+        await createUserNotification({
+            recipient: nextDriver,
+            title: 'City Bus Assigned',
+            message: `You have been assigned to city bus ${bus.busNumber}.`,
+            type: 'assignment'
+        });
+    }
 
     // Notify all clients of the updated active bus list
     const { io } = await import('../../app.js');
